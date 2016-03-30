@@ -73,15 +73,14 @@ def main():
 			horzList = list()
 			line = line.split(",")
 			for cell in line:
+				if "\n" in cell:
+					cell = cell.replace("\n","")
 				horzList.append(cell)
 			vertList.append(horzList)
 		return vertList
 	def csvToCells(csvTable,listOfCells):
-		index = 0
-		for line in csvTable:
-			for cell in csvTable:
-				listOfCells[index].value = cell
-				index += 1
+		for cell in listOfCells:
+			cell.value = csvTable[cell.row-1][cell.col-1]
 		return listOfCells
 
 	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
