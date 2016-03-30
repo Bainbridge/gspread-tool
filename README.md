@@ -11,7 +11,7 @@ This is a tool that can turn a regular old spreadsheet file (*.csv) into a Googl
 - Install gspread (via pip)
 - Install OAuth2Client (version 1.5.2) (via pip)
 - Install PyOpenSSL (via easy_install)
-- Changing the "/path/to/file" in spreadTool.py to the path of your service account credentials
+- Change the "/path/to/file" in spreadTool.py to the path of your service account credentials
 
  
 
