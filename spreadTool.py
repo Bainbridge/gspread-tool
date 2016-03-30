@@ -27,18 +27,35 @@ parser.add_argument('-s', action="store",required=False,help="Specifies the inde
 args = parser.parse_args()
 
 def main():
+	def intToLetter(number):
+		div=number
+		string=""
+		temp=0
+		while div>0:
+			module=(div-1)%26
+			string=chr(65+module)+string
+			div=int((div-module)/26)
+		return string
 	def clearSheet(worksheetName):
 		def getNumOfRows(worksheetName):
 			numberOfRows = 0
 			columnList = worksheetName.col_values(1)
 			for item in columnList:
-				numberOfRows += 1
+				if item != "":
+					numberOfRows += 1
 			return numberOfRows
+		def getNumOfCols(worksheetName):
+			numberOfCols = 0
+			rowList = worksheetName.row_values(1)
+			for item in rowList:
+				numberOfCols += 1
+			return numberOfCols
 		numberOfRows = getNumOfRows(worksheetName)
-		rangeBuild = 'A2:H'+str(numberOfRows+1)
+		rangeBuild = 'A1:'+str(intToLetter(getNumOfCols(worksheetName)))+str(numberOfRows+1)
 		cells_list = worksheetName.range(rangeBuild)
 		for cell in cells_list:
 			try:
+				print(cell.value)
 				cell.value = ""
 			except:		
 				print("ERROR: An error has occurred when erasing on line "+str(index))
@@ -55,15 +72,6 @@ def main():
 				if len(horzLine) > maxInt:
 					maxInt = len(horzLine)
 			return maxInt
-		def intToLetter(number):
-			div=number
-			string=""
-			temp=0
-			while div>0:
-				module=(div-1)%26
-				string=chr(65+module)+string
-				div=int((div-module)/26)
-			return string
 		rangeStr = "A1:"+str(intToLetter(getWidth(tableList)))+str(getHeight(tableList))
 		return rangeStr
 
@@ -108,7 +116,7 @@ def main():
 	except:
 		print("Failed to grab individual sheet, must not exist")
 	# Clear the sheet before writing to it to delete previous information
-	# clearSheet(worksheet)
+	clearSheet(worksheet)
 	csvFile = open(args.f,"r")
 	sheetTable = buildSheetTable(csvFile)
 	csvFile.close()
