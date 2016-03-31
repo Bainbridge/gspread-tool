@@ -86,7 +86,10 @@ def main():
 		return vertList
 	def csvToCells(csvTable,listOfCells):
 		for cell in listOfCells:
-			cell.value = csvTable[cell.row-1][cell.col-1]
+			try:
+				cell.value = csvTable[cell.row-1][cell.col-1]
+			except gspread.exceptions.UpdateCellError:
+				print("Failed to update "+intToLetter(cell.col)+str(cell.row))
 		return listOfCells
 
 	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
@@ -95,19 +98,25 @@ def main():
 		gclient = gspread.authorize(credentials)
 		gclient.login()
 		print("Account authorized")
-	except:
-		print("Failed to authorize the service account, make sure you have the right credentials and permissions")
-		return
-	try:
 		sh = gclient.open(args.n)
 		if args.s:
-			worksheet = sh.get_worksheet(int(args.s))
+			if args.s.isdigit():
+				selection = int(args.s)
+				worksheet = sh.get_worksheet(selection)
+			else:
+				worksheet = sh.get_worksheet(args.s)
 			print("Authorization complete!")
 		else:
 			worksheet = sh.get_worksheet(0)
 			print("Authorization complete!")
+	except gspread.exceptions.WorksheetNotFound:
+		print("Failed to open up worksheet, make sure that the worksheet exists")
+		return
 	except gspread.exceptions.SpreadsheetNotFound:
 		print("Failed to open up the Spreadsheet, make sure you are sharing it with the service account")
+		return
+	except:
+		print("Failed to authorize the service account, make sure you have the right credentials and permissions")
 		return
 	# Clear the sheet before writing to it to delete previous information
 	clearSheet(worksheet)
