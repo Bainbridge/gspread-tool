@@ -90,7 +90,6 @@ def main():
 		return listOfCells
 
 	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
-	# TODO: This only needs to be only one try suite
 	try:
 		print("Authorizing account...")
 		gclient = gspread.authorize(credentials)
@@ -101,18 +100,14 @@ def main():
 		return
 	try:
 		sh = gclient.open(args.n)
-	except:
-		print("Failed to open up the Spreadsheet, make sure you are sharing it with the service account")
-		return
-	try:
 		if args.s:
 			worksheet = sh.get_worksheet(int(args.s))
 			print("Authorization complete!")
 		else:
 			worksheet = sh.get_worksheet(0)
 			print("Authorization complete!")
-	except:
-		print("Failed to grab individual sheet, must not exist")
+	except gspread.exceptions.SpreadsheetNotFound:
+		print("Failed to open up the Spreadsheet, make sure you are sharing it with the service account")
 		return
 	# Clear the sheet before writing to it to delete previous information
 	clearSheet(worksheet)
