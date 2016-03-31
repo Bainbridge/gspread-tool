@@ -9,7 +9,9 @@ This is a tool that can turn a regular old spreadsheet file (*.csv) into a Googl
 
 - Get OAuth2 Service account
 - Install gspread (via pip)
-- Install OAuth2Client (via pip)
+- Install OAuth2Client (version 1.5.2) (via pip)
+- Install PyOpenSSL (via easy_install)
+- Change the "/path/to/file" in spreadTool.py to the path of your service account credentials
 
  
 
@@ -27,4 +29,8 @@ This is very easy, the only things you need to do is manually create a Google Sp
 
 ```sh
 $ spreadtool.py -f "LameSpreadsheet.csv" -n "Google Spreadsheet Name"
+```
+If you'd like to specify the sheet that you'd like to write to, use the -s argument (defaults to 0)
+```sh
+$ spreadtool.py -f "LameSpreadsheet.csv" -n "Google Spreadsheet Name" -s 0
 ```
