@@ -7,6 +7,11 @@ This is a tool that can turn a regular old spreadsheet file (*.csv) into a Googl
 --------
 ### Prerequisites:
 
+#### Automatically
+If you have pip install all you have to do is
+`pip install -r requirements.txt`
+
+#### Manually
 - Get OAuth2 Service account
 - Install gspread (via pip)
 - Install OAuth2Client (version 1.5.2) (via pip)
